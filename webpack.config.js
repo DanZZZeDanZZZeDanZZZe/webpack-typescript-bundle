@@ -29,14 +29,18 @@ module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: isDev ? 'development' : 'production',
   entry: {
-    main: './index.ts'
+    main: ["@babel/polyfill", "./index.ts"]
   },
   output: {
     filename: filename('js'),
     path: path.resolve(__dirname, 'dist')
   },
   resolve: {
-    extensions: ['js', 'json']
+    extensions: ['.ts','.js', '.json']
+  },
+  devServer: {
+    port: 4200,
+    hot: true
   },
   devtool: isDev ? 'source-map' : '',
   plugins: [
@@ -56,17 +60,19 @@ module.exports = {
       },
       { 
         test: /\.js$/, 
-        exclude: /node_modules/, 
-        use: [{
+      /*  exclude: /node_modules/, */
+        loader:{
           loader: 'babel-loader',
           options: babelOptions()
-        }],
+        },
+      },
+      {
         test: /\.ts$/, 
-        exclude: /node_modules/, 
-        use: [{
+      /*  exclude: /node_modules/, */
+        loader: {
           loader: 'babel-loader',
           options: babelOptions('@babel/preset-typescript')
-        }]
+        }
       }
     ]
   }

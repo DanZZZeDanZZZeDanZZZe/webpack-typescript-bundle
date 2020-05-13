@@ -1,5 +1,5 @@
 import './styles.css'
 
-const str: string = 'TS'
+const str = 'TS'
 
 console.log('hello', str)
