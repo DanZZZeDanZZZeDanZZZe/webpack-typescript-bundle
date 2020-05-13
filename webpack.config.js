@@ -13,11 +13,23 @@ const filename = ext =>
     ? `[name].${ext}` 
     : `[name].[hash].${ext}`
 
+const babelOptions = preset => {
+  const opts = {
+    presets: [
+      '@babel/preset-env',
+    ]
+  }
+
+  if (preset) {
+    opts.presets.push(preset)
+  }
+  return opts
+}
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   mode: isDev ? 'development' : 'production',
   entry: {
-    main: './index.js'
+    main: './index.ts'
   },
   output: {
     filename: filename('js'),
@@ -41,6 +53,20 @@ module.exports = {
       {
         test: /\.css$/,
         use: 'css-loader'
+      },
+      { 
+        test: /\.js$/, 
+        exclude: /node_modules/, 
+        use: [{
+          loader: 'babel-loader',
+          options: babelOptions()
+        }],
+        test: /\.ts$/, 
+        exclude: /node_modules/, 
+        use: [{
+          loader: 'babel-loader',
+          options: babelOptions('@babel/preset-typescript')
+        }]
       }
     ]
   }
